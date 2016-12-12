@@ -1,0 +1,110 @@
+﻿<html>
+<head>
+<meta charset="utf-8">
+<title>병원관리 시스템</title>
+<style>
+#center { position:absolute; radius:5px; top:50%; left:50%; width:350px; height:450px; overflow:hidden; background-color:#E5FFFF; margin-top:-250px; margin-left:-150px;}
+#id_form { text-align:center }
+.table_title { padding-left:10px; width:100px; height:30px; background-color:#9DCFFF}
+.table_input { padding-left:10px; width:200px; height:30px;}
+</style>
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script>
+
+function signup(){
+
+
+var id = $('.id').val();
+var pw = $('.pw').val();
+var name = $('.name').val();
+var job = $('.job').val();
+var department = $('.department').val();
+var room = $('.room').val();
+var phonenum = $('.phonenum').val();
+var sex;
+$("input[type=checkbox]:checked").each(function() {
+  sex = $(this).val();
+});
+
+
+
+$.ajax({
+         url:'http://kms312003.dothome.co.kr/php/signup.php',
+         type: 'post',
+         data : { 
+			'id' : id,
+			'pw' : pw,
+			'name' : name,
+			'job' : job,
+			'department' : department,
+			'room' : room,
+			'phonenum' : phonenum,
+			'sex' : sex
+		},
+         success: function(result) {
+            alert('개인정보 수정이 완료되었습니다.');
+			window.location.href="http://kms312003.dothome.co.kr/web/reinfo.html";
+         }, error:function(request,status,error){
+            console.log('bad');
+         }   
+      });
+
+}
+
+
+</script>
+
+
+<body style="background-color:#E5FFFF;">
+<div id="center" style="text-align:center;" align="center">
+<center>
+<font style="font-size:20px;">개인정보수정</font>
+<table border="0" cellpadding="0" cellspacing="0" style="margin-top:30px;">
+<tr>
+<td class="table_title">이름</td>
+<td class="table_input"><input class="name" type="text" style="width:100%;" placeholder="이름을 입력해주세요"/></td>
+</tr>
+<tr><td style="height:10px;"></td><td></td></tr>
+<tr>
+<td class="table_title">성별</td>
+<td class="table_input">
+<input type="checkbox" value="man"/>남성
+<input type="checkbox" value="woman"/>여성
+</td>
+</tr>
+<tr><td style="height:10px;"></td><td></td></tr>
+<tr>
+<td class="table_title">직군</td>
+<td class="table_input"><input class="job" type="text" style="width:100%;" placeholder="의사 또는 간호사"/></td>
+</tr>
+<tr><td style="height:10px;"></td><td></td></tr>
+<tr>
+<td class="table_title">병과</td>
+<td class="table_input"><input class="department" type="text" style="width:100%;" placeholder="과를 입력하세요"/></td>
+</tr>
+<tr><td style="height:10px;"></td><td></td></tr>
+<tr>
+<td class="table_title">진료실</td>
+<td class="table_input"><input class="room" type="text" style="width:100%;" placeholder="호실을 입력하세요"/></td>
+</tr>
+<tr><td style="height:10px;"></td><td></td></tr>
+<tr>
+<td class="table_title">전화번호</td>
+<td class="table_input"><input class="phonenum" type="text" style="width:100%;" placeholder="전화번호 입력해주세요"/></td>
+</tr>
+<tr><td style="height:40px;"></td><td></td></tr>
+<tr>
+<td colspan="2">
+<center>
+<input type="button" style="width:150px;" value="수정완료" onclick="signup()"/>
+</center>
+</td>
+</tr>
+</table>
+</center>
+</div>
+
+</body>
+
+</html>

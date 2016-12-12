@@ -1,0 +1,210 @@
+﻿<?php
+
+$servername = "localhost";
+$username = "kms312003";
+$password = "kim339352";
+$dbname = "kms312003";
+
+$seq = $_COOKIE['seq'];
+
+
+  $con = mysql_connect($servername,$username,$password)or die('Could not connect: ' . mysql_error());
+
+   mysql_query("set session character_set_connection=utf8;");
+   mysql_query("set session character_set_results=utf8;");
+   mysql_query("set session character_set_client=utf8;");
+
+   mysql_select_db($dbname);
+
+   $result = mysql_query("select * from patient where seq='$seq'");
+
+?>
+
+<html>
+<head>
+<meta charset="utf-8">
+<title>병원관리 시스템</title>
+
+<style>
+
+#center { position:relative; radius:5px; top:80%; left:20%; width:350px; height:250px; overflow:hidden; background-color:#E5FFFF; margin-top:-250px; margin-left:-150px;}
+#middle { position:relative; radius:5px; top:80%; left:50%; width:350px; height:250px; overflow:hidden; background-color:#E5FFFF; margin-top:-250px; margin-left:-150px;}
+#right { position:relative; radius:5px; top:80%; left:80%; width:350px; height:250px; overflow:hidden; background-color:#E5FFFF; margin-top:-250px; margin-left:-150px;}
+
+#id_form { text-align:center }
+.table_title { padding-left:10px; width:100px; height:30px; background-color:#9DCFFF}
+.table_input { padding-left:10px; width:200px; height:30px;}
+
+body{
+margin: 0px;
+padding: 0px;
+}
+
+
+#contents{
+border: 1px solid #487BE1;
+width:900px;
+height : 610px;
+float: left;
+padding: 10px;
+margin-left : 5px;
+}
+
+#sidebar{
+width:300px;
+height : 610px;
+float: left;
+padding: 10px;
+margin-left: 0px;
+}
+
+
+
+</style>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+function getUserInfo(p_seq){
+
+	$.ajax({
+         url:'http://kms312003.dothome.co.kr/php/getUserInfo.php',
+         type: 'post',
+         data : "&p_seq="+p_seq,
+         success: function(result) {
+				var dataArr = $.parseJSON(result);
+				$("#Name1").html(dataArr['data']['Name'] + "<button onclick=\"deleteUser('"+p_seq+"')\" style='margin-left:100px;'>삭제</button>");
+				$("#Name2").html(dataArr['data']['Name']);
+				$("#RRN").html(dataArr['data']['RRN']);
+				$("#Age").html(dataArr['data']['Age']);
+				$("#PhoneNum").html(dataArr['data']['PhoneNum']);
+				$("#Height").html(dataArr['data']['Height']);
+				$("#Weight").html(dataArr['data']['Weight']);
+				$("#Sex").html(dataArr['data']['Sex']);
+				$("#Pressure").html(dataArr['data']['Pressure']);
+				$("#Pname").html(dataArr['data']['Pname']);
+				$("#PAge").html(dataArr['data']['PAge']);
+				$("#Pronum").html(dataArr['data']['Pronum']);
+				$("#Relation").html(dataArr['data']['Relation']);
+         }, error:function(request,status,error){
+            console.log('bad');
+         }
+      });
+}
+function deleteUser(p_seq){
+	$.ajax({
+         url:'http://kms312003.dothome.co.kr/php/deleteUser.php',
+         type: 'post',
+         data : "&p_seq="+p_seq,
+         success: function(result) {
+				console.log(result);
+				var dataArr = $.parseJSON(result);
+				console.log(dataArr);
+				if(dataArr['data'] == "Y"){
+				location.href = location.href;
+				}
+         }, error:function(request,status,error){
+            console.log('bad');
+         }
+      });
+}
+</script>
+
+
+
+</head>
+
+
+<body style="background-color:#E5FFFF;">
+<div>
+<input type="button" value="뒤로가기" style="width:100px; margin-left:20px; margin-top:20px;" onclick="location.href='http://kms312003.dothome.co.kr/web/home.html'"/>
+<input type="button" value="환자정보등록" style="width:100px;" onclick="location.href='http://kms312003.dothome.co.kr/web/patient_register.html'"/>
+<img src="../images/title.PNG" style="position:absolute; width:300px; height:80px; margin-left:480px; margin-top:20px;"/>
+</div>
+
+   <div id = "sidebar" style="border:1px solid #487BE1; margin-top:20px; margin-left:20px;">
+
+		<tr align="center"><td colspan="2" ><font style="font-size:20px; font-weight:bold;">환자 리스트</font></td></tr>
+    	<table border="0" style="border-top:1px solid #000; border-bottom:1px solid #000" width="100%">
+	 			<tr>
+			<td style="height:40px; width:20%;" align="center">번호</td>
+         	<td style="width:30%;" align="center">이름</td>
+        	<td style="width:50%;" align="center">주민번호</td>
+		</tr>
+		<?
+		   while ($row = mysql_fetch_array($result)) {
+		   echo "<tr style='border-top:1px solid #000; cursor:pointer;' onclick=\"getUserInfo('".$row['p_seq']."')\"><td align='center' style='height:20px;'>" . $row['p_seq']."</td><td align='center'>".$row['Name']."</td><td align='center'>".$row['RRN']."</td></tr>";
+		   }
+		?>
+	</table>
+
+   </div>
+
+
+   <div id="contents" style="margin-top:20px; margin-left:20px; padding:40px; ">
+		<div style="width:100%; height:100%; border:1px solid #487BE1; ">
+		<table border:1px solid #487BE1; width="100%" height="100%">
+		<tr>
+		<td colspan=3> 이름 : <div id="Name1" style='width:150px;display:inline'></div></td>
+		</tr>
+		<tr>
+		<td>
+		<table class="table">
+		<tbody>
+			<tr><td colspan="2">개인 정보</td></tr>
+			<tr align="center"><td class="info">이름</td><td><div id="Name2"></div></td></tr>
+			<tr><td colspan="2"></td></tr>
+			<tr align="center"><td class="info">주민번호</td><td><div id="RRN"></div></td></tr>
+			<tr><td colspan="2"></td></tr>
+			<tr align="center"><td class="info">나이</td><td><div id="Age"></div></td></tr>
+			<tr><td colspan="2"></td></tr>
+			<tr align="center"><td class="info">연락처</td><td><div id="PhoneNum"></div></td></tr>
+			<tr><td colspan="2"></td></tr>
+		</tbody>
+		</table>
+		</td>
+		<td>
+			<table class="table">
+			<tbody>
+			<tr><td colspan="2">신상 정보</td></tr>
+			<tr align="center"><td class="info">신장</td><td><div id="Height"></div></td></tr>
+			<tr><td colspan="2"></td></tr>
+			<tr align="center"><td class="info">몸무게</td><td><div id="Weight"></div></td></tr>
+			<tr><td colspan="2"></td></tr>
+			<tr align="center"><td class="info">성별</td><td><div id="Sex"></div></td></tr>
+			<tr><td colspan="2"></td></tr>
+			<tr align="center"><td class="info">혈압</td> <td><div id="Pressure"></div></td></tr>
+			<tr><td colspan="2"></td></tr>
+			</tbody>
+			</table>
+		</td>
+		<td>
+			<table class="table">
+			<tbody>
+			<tr><td colspan="2">보호자 정보</td></tr>
+			<tr align="center"><td class="info">이름</td><td><div id="Pname"></div></td></tr>
+			<tr><td colspan="2"></td></tr>
+			<tr align="center"><td class="info">나이</td><td><div id="PAge"></div></td></tr>
+			<tr><td colspan="2"></td></tr>
+			<tr align="center"><td class="info">연락처</td><td><div id="Pronum"></div></td></tr>
+			<tr><td colspan="2"></td></tr>
+			<tr align="center"><td class="info">관계</td><td><div id="Relation"></div></td></tr>
+			<tr><td colspan="2"></td></tr>
+			</tbody>
+		</table>
+		</td>
+		</tr>
+		</table>
+		</div>
+   </div>
+
+</body>
+
+</html>
+
+
+<?
+mysql_free_result($result);
+mysql_close($con);
+?>

@@ -1,0 +1,185 @@
+﻿<html>
+<head>
+<meta charset="utf-8">
+<title>병원관리 시스템</title>
+<style>
+#center { position:absolute; radius:5px; top:50%; left:20%; width:350px; height:450px; overflow:hidden; background-color:#E5FFFF; margin-top:-250px; margin-left:-150px;}
+#middle { position:absolute; radius:5px; top:50%; left:50%; width:350px; height:450px; overflow:hidden; background-color:#E5FFFF; margin-top:-250px; margin-left:-150px;}
+#right { position:absolute; radius:5px; top:50%; left:80%; width:350px; height:450px; overflow:hidden; background-color:#E5FFFF; margin-top:-250px; margin-left:-150px;}
+
+#id_form { text-align:center }
+.table_title { padding-left:10px; width:100px; height:30px; background-color:#9DCFFF}
+.table_input { padding-left:10px; width:200px; height:30px;}
+</style>
+</head>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+
+function patient(){
+
+
+var Name = $('.Name').val();
+var RRN = $('.RRN').val();
+var Age = $('.Age').val();
+var PhoneNum = $('.PhoneNum').val();
+var Height = $('.Height').val();
+var Weight = $('.Weight').val();
+var Sex = $('.Sex').val();
+var Pressure = $('.Pressure').val();
+var Pname = $('.Pname').val();
+var PAge = $('.PAge').val();
+var ProNum = $('.ProNum').val();
+var relation = $('.relation').val();
+var Sex;
+$("input[type=checkbox]:checked").each(function() {
+  Sex = $(this).val();
+});
+
+    function getCookie(cName) {
+        cName = cName + '=';
+        var cookieData = document.cookie;
+        var start = cookieData.indexOf(cName);
+        var cValue = '';
+        if(start != -1){
+            start += cName.length;
+            var end = cookieData.indexOf(';', start);
+            if(end == -1)end = cookieData.length;
+            cValue = cookieData.substring(start, end);
+        }
+        return unescape(cValue);
+    }
+
+var seq = getCookie('seq');
+
+$.ajax({
+         url:'http://kms312003.dothome.co.kr/php/patient.php',
+         type: 'post',
+         data : {
+			'Name' : Name,
+			'RRN' : RRN,
+			'Age' : Age,
+			'PhoneNum' : PhoneNum,
+			'Height' : Height,
+			'Weight' : Weight,
+			'Sex' : Sex,
+			'Pressure' : Pressure,
+			'Pname' : Pname,
+			'PAge' : PAge,
+			'ProNum' : ProNum,
+			'relation' : relation,
+			'seq' : seq
+		},
+         success: function(result) {
+            alert('환자정보 등록이 완료되었습니다.');
+			window.location.href="http://kms312003.dothome.co.kr/web/patient_state.html";
+         }, error:function(request,status,error){
+            console.log('bad');
+         }
+      });
+
+}
+
+
+</script>
+
+
+<body style="background-color:#E5FFFF;">
+<div id="center" style="text-align:center;" align="center">
+<center>
+<font style="font-size:20px;">개인정보</font>
+<table border="0" cellpadding="0" cellspacing="0" style="margin-top:30px;">
+<tr>
+<td class="table_title">이름</td>
+<td class="table_input"><input class="Name" type="text" style="width:100%;" placeholder="이름을 입력하세요"/></td>
+</tr>
+<tr><td style="height:10px;"></td><td></td></tr>
+<tr>
+<td class="table_title">주민등록번호</td>
+<td class="table_input"><input class="RRN" type="text" style="width:100%;" placeholder="주민등록번호를 입력하세요"/></td>
+</tr>
+<tr><td style="height:10px;"></td><td></td></tr>
+<tr>
+<td class="table_title">나이</td>
+<td class="table_input"><input class="Age" type="text" style="width:100%;" placeholder="나이를 입력하세요"/></td>
+</tr>
+<tr><td style="height:10px;"></td><td></td></tr>
+<tr>
+<td class="table_title">전화번호</td>
+<td class="table_input"><input class="PhoneNum" type="text" style="width:100%;" placeholder="전화번호를 입력하세요"/></td>
+</tr>
+
+</table>
+</center>
+</div>
+
+
+<div id="middle" style="text-align:center;" align="center">
+<center>
+<font style="font-size:20px;">신체정보</font>
+<table border="0" cellpadding="0" cellspacing="0" style="margin-top:30px;">
+<tr>
+<td class="table_title">성별</td>
+<td class="table_input">
+<input type="checkbox" value="man"/>남성
+<input type="checkbox" value="woman"/>여성
+</td>
+</tr>
+<tr><td style="height:10px;"></td><td></td></tr>
+<tr>
+<td class="table_title">키</td>
+<td class="table_input"><input class="Height" type="text" style="width:100%;" placeholder="환자의 키를 입력하세요"/></td>
+</tr>
+<tr><td style="height:10px;"></td><td></td></tr>
+<tr>
+<td class="table_title">몸무게</td>
+<td class="table_input"><input class="Weight" type="text" style="width:100%;" placeholder="환자의 몸무게를 입력하세요"/></td>
+</tr>
+<tr><td style="height:10px;"></td><td></td></tr>
+<tr>
+<td class="table_title">혈압</td>
+<td class="table_input"><input class="Pressure" type="text" style="width:100%;" placeholder="환자의 혈압을 입력하세요"/></td>
+</tr>
+
+</table>
+
+<input type="button" style="width:150px;" value="등록하기" onclick="patient()"/>
+<input type="button" style="width:150px;" value="돌아가기" onclick="location.href='http://kms312003.dothome.co.kr/web/patient_state.html'"/>
+</center>
+</div>
+
+
+
+
+<div id="right" style="text-align:center;" align="center">
+<center>
+<font style="font-size:20px;">보호자정보</font>
+<table border="0" cellpadding="0" cellspacing="0" style="margin-top:30px;">
+<tr>
+<td class="table_title">보호자 이름</td>
+<td class="table_input"><input class="Pname" type="text" style="width:100%;" placeholder="보호자의 이름을 입력하세요"/></td>
+</tr>
+<tr><td style="height:10px;"></td><td></td></tr>
+<tr>
+<td class="table_title">나이</td>
+<td class="table_input"><input class="PAge" type="text" style="width:100%;" placeholder="보호자의 나이를 입력하세요"/></td>
+</tr>
+<tr><td style="height:10px;"></td><td></td></tr>
+<tr>
+<td class="table_title">보호자 연락처</td>
+<td class="table_input"><input class="ProNum" type="text" style="width:100%;" placeholder="보호자의 연락처를 입력하세요"/></td>
+</tr>
+<tr><td style="height:10px;"></td><td></td></tr>
+<tr>
+<td class="table_title">관계</td>
+<td class="table_input"><input class="relation" type="text" style="width:100%;" placeholder="관계를 입력하세요"/></td>
+</tr>
+</table>
+</center>
+</div>
+
+</body>
+
+</html>
